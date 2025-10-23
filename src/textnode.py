@@ -1,10 +1,12 @@
 from enum import Enum
 
-class Bender(Enum):
-    AIR_BENDER = "air"
-    WATER_BENDER = "water"
-    EARTH_BENDER = "earth"
-    FIRE_BENDER = "fire"
+class TextType(Enum):
+    TEXT = "text"
+    LINK = "link"
+    BOLD = "bold"
+    ITALIC = "italic"
+    CODE = "code"
+    IMAGE = "image"
 
 class TextNode:
     def __init__(self,text,text_type,url = None):

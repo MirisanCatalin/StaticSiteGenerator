@@ -1,4 +1,4 @@
-from textnode import TextNode, Bender
+from textnode import TextNode, TextType
 
 def main():
     ceva = TextNode("This is some anchor text", "link", "https://www.boot.dev")
