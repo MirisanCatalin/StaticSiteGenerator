@@ -97,6 +97,26 @@ class TestParentNode(unittest.TestCase):
             parent_node.to_html(),
             "<div><span><b>grandchild</b></span></div>",
         )
+    
+    def test_to_html_no_tag(self):
+        child_node = LeafNode("i", "italic text")
+        parent_node = ParentNode(None, [child_node])
+        with self.assertRaises(ValueError):
+            parent_node.to_html()
 
+    def test_to_html_no_children(self):
+        parent_node = ParentNode("div", None)
+        with self.assertRaises(ValueError):
+            parent_node.to_html()
+
+    def test_repr(self):
+        child_node = LeafNode("u", "underlined")
+        parent_node = ParentNode("p", [child_node], {"class": "text"})
+        self.assertEqual(
+            repr(parent_node),
+            "ParentNode(tag=p, children=[LeafNode(tag=u, value=underlined, props=None)], props={'class': 'text'})"
+        )
+
+    
 if __name__ == "__main__":
     unittest.main()
