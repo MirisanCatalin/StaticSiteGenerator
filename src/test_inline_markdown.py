@@ -1,6 +1,6 @@
 import unittest
 
-from inline_markdown import split_nodes_delimiter
+from inline_markdown import split_nodes_delimiter,extract_markdown_images, extract_markdown_links
 from textnode import TextNode,TextType
 
 class TestInlineMarkdown(unittest.TestCase):
@@ -68,7 +68,38 @@ class TestInlineMarkdown(unittest.TestCase):
             ],
             final_nodes,
         )
+    
+    def test_extract_markdown_images(self):
+        matches = extract_markdown_images(
+            "This is text with an ![image](https://i.imgur.com/zjjcJKZ.png)"
+        )
+        self.assertListEqual([("image", "https://i.imgur.com/zjjcJKZ.png")], matches)
 
-
+    def test_extract_markdown_links(self):
+        matches = extract_markdown_links(
+            "This is text with a [link](https://www.example.com)"
+        )
+        self.assertListEqual([("link", "https://www.example.com")], matches)
+    
+    def test_extract_multiple_markdown_links_and_images(self):
+        text = "Here is an ![image1](https://example.com/image1.png) and a [link1](https://example.com/link1) followed by ![image2](https://example.com/image2.png) and [link2](https://example.com/link2)."
+        image_matches = extract_markdown_images(text)
+        link_matches = extract_markdown_links(text)
+        #print("Image Matches:", image_matches)
+        #print("Link Matches:", link_matches)
+        self.assertListEqual(
+            [
+                ("image1", "https://example.com/image1.png"),
+                ("image2", "https://example.com/image2.png"),
+            ],
+            image_matches,
+        )
+        self.assertListEqual(
+            [
+                ("link1", "https://example.com/link1"),
+                ("link2", "https://example.com/link2"),
+            ],
+           link_matches,
+        )
 if __name__ == "__main__":
     unittest.main()
