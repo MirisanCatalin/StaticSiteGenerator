@@ -6,6 +6,7 @@ from inline_markdown import (
     extract_markdown_links,
     split_nodes_image,
     split_nodes_link,
+    text_to_textnodes,
 )
 from textnode import TextNode,TextType
 
@@ -55,11 +56,11 @@ class TestInlineMarkdown(unittest.TestCase):
         )
 
     def test_multiple_delimiters(self):
-        node = TextNode("This **is** a __test__ with `code`", TextType.TEXT)
+        node = TextNode("This **is** a _test_ with `code`", TextType.TEXT)
         nodes_after_bold = split_nodes_delimiter([node], "**", TextType.BOLD)
         nodes_after_italic = []
         for n in nodes_after_bold:
-            nodes_after_italic.extend(split_nodes_delimiter([n], "__", TextType.ITALIC))
+            nodes_after_italic.extend(split_nodes_delimiter([n], "_", TextType.ITALIC))
         final_nodes = []
         for n in nodes_after_italic:
             final_nodes.extend(split_nodes_delimiter([n], "`", TextType.CODE))
@@ -142,6 +143,25 @@ class TestInlineMarkdown(unittest.TestCase):
                 TextNode("second link", TextType.LINK, "https://www.test.com"),
             ],
             new_nodes,
+        )
+    
+    def test_text_to_textnodes(self):
+        node = "This is **text** with an _italic_ word and a `code block` and an ![obi wan image](https://i.imgur.com/fJRm4Vk.jpeg) and a [link](https://boot.dev)"
+        new_nodes = text_to_textnodes(node)
+        self.assertListEqual(
+            new_nodes,
+            [
+                TextNode("This is ", TextType.TEXT),
+                TextNode("text", TextType.BOLD),
+                TextNode(" with an ", TextType.TEXT),
+                TextNode("italic", TextType.ITALIC),
+                TextNode(" word and a ", TextType.TEXT),
+                TextNode("code block", TextType.CODE),
+                TextNode(" and an ", TextType.TEXT),
+                TextNode("obi wan image", TextType.IMAGE, "https://i.imgur.com/fJRm4Vk.jpeg"),
+                TextNode(" and a ", TextType.TEXT),
+                TextNode("link", TextType.LINK, "https://boot.dev"),
+            ]
         )
 if __name__ == "__main__":
     unittest.main()
