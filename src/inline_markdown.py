@@ -1,4 +1,4 @@
-from htmlnode import LeafNode, ParentNode
+from htmlnode import LeafNode, ParentNode, text_node_to_html_node
 from textnode import TextNode, TextType 
 
 import re
@@ -99,3 +99,12 @@ def text_to_textnodes(text):
     nodes = split_nodes_link(nodes)
     nodes = split_nodes_image(nodes)
     return nodes
+
+
+def text_to_children(text):
+    text_nodes = text_to_textnodes(text)
+    html_nodes = []
+    for text_node in text_nodes:
+        html_node = text_node_to_html_node(text_node)
+        html_nodes.append(html_node)
+    return html_nodes
