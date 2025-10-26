@@ -168,3 +168,9 @@ def markdown_to_html_node(markdown):
         block_nodes.append(node)
     
     return ParentNode("div", block_nodes)
+
+def extract_title(markdown):
+    markdown = markdown.strip(" #")
+
+    return markdown
+

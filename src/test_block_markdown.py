@@ -1,4 +1,4 @@
-from block_markdown import markdown_to_blocks,block_to_block_type,BlockType 
+from block_markdown import markdown_to_blocks,block_to_block_type,BlockType,extract_title
 
 import unittest
 
@@ -167,6 +167,14 @@ the **same** even with inline stuff
         self.assertEqual(
             html,
             "<div><pre><code>This is text that _should_ remain\nthe **same** even with inline stuff\n</code></pre></div>",
+        )
+
+    def test_extract_title(self):
+        md = "# Hello"
+        answer = extract_title(md)
+        self.assertEqual(
+            answer,
+            "Hello"
         )
 
 
